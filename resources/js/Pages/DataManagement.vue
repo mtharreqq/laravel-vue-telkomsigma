@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
@@ -16,6 +17,19 @@ import { Head } from '@inertiajs/vue3';
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div
+                        class="space-x-2 border-b border-gray-200 bg-white p-6"
+                    >
+                        <PrimaryButton class="bg-green-500 hover:bg-green-600"
+                            ><a href="/persons/add/5"> Add 5 Persons </a>
+                        </PrimaryButton>
+                        <PrimaryButton class="bg-red-500 hover:bg-red-600"
+                            ><a href="/persons/delete/5"> Remove 5 Persons </a>
+                        </PrimaryButton>
+                        <PrimaryButton
+                            ><a href="/persons/delete/all"> Remove All</a>
+                        </PrimaryButton>
+                    </div>
                     <!-- <highcharts-demo></highcharts-demo> -->
                     <pre class="p-6">Total Persons: {{ data.length }}</pre>
                     <div

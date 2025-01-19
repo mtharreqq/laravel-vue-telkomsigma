@@ -39,26 +39,26 @@ const columns = [
     columnHelper.accessor('gender', {
         header: () => 'Gender',
     }),
-    columnHelper.accessor('email', {
-        header: () => 'Email',
-    }),
-    // columnHelper.accessor('dob', {
-    //     header: () => 'Date of Birth',
-    //     cell: (info) => {
-    //         const dateString = info.getValue(); // Get the string value
-    //         const formattedDate = new Date(dateString)
-    //             .toLocaleDateString('en-GB', {
-    //                 day: '2-digit',
-    //                 month: 'long',
-    //                 year: 'numeric',
-    //             })
-    //             .replace(',', ''); // Format the date
-    //         return formattedDate;
-    //     },
+    // columnHelper.accessor('email', {
+    //     header: () => 'Email',
     // }),
-    columnHelper.accessor('phone', {
-        header: () => 'Phone',
+    columnHelper.accessor('dob', {
+        header: () => 'Date of Birth',
+        cell: (info) => {
+            const dateString = info.getValue(); // Get the string value
+            const formattedDate = new Date(dateString)
+                .toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                })
+                .replace(',', ''); // Format the date
+            return formattedDate;
+        },
     }),
+    // columnHelper.accessor('phone', {
+    //     header: () => 'Phone',
+    // }),
     columnHelper.accessor('country', {
         header: () => 'Country',
     }),

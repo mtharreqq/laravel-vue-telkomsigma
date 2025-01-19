@@ -2,21 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePersonsRequest;
-use App\Http\Requests\UpdatePersonsRequest;
+use Illuminate\Http\Request;
 use App\Models\Persons;
 use Illuminate\Support\Facades\Http;
+use Inertia\Inertia;
 
 class PersonsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     public function addPersons()
     {
         try {
@@ -31,7 +23,7 @@ class PersonsController extends Controller
                             'email' => $person['email'],
                             'gender' => $person['gender'],
                             'phone' => $person['phone'],
-                            'dob' => "{$person['dob']['date']}",
+                            'dob' => substr($person['dob']['date'], 0, 10),
                             'country' => "{$person['location']['country']}",
                         ];
                     }
@@ -96,19 +88,36 @@ class PersonsController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    // public function index()
+    // {
+    //     return Persons::latest()->get();
+    // }
+
+    public function index()
+    {
+        $persons = Persons::latest()->get();
+        return Inertia::render('Persons/Index', ['persons' => $persons]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return Inertia::render('Persons/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePersonsRequest $request)
+    public function store(Request $request)
     {
-        //
+        $person = new Persons($request->all());
+        $person->save();
+
+        return redirect()->route('persons.index');
     }
 
     /**
@@ -122,24 +131,26 @@ class PersonsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Persons $persons)
+    public function edit(Persons $person)
     {
-        //
+        return Inertia::render('Persons/Edit', ['person' => $person]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePersonsRequest $request, Persons $persons)
+    public function update(Request $request, Persons $person)
     {
-        //
+        $person->update($request->all());
+        return redirect()->route('persons.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Persons $persons)
+    public function destroy(Persons $person)
     {
-        //
+        $person->delete();
+        return redirect()->back();
     }
 }

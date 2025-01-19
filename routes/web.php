@@ -22,11 +22,7 @@ Route::get('/dashboard', function () {
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/data-management', function () {
-    return Inertia::render('DataManagement', ['data' => Persons::all()]);
-})
-    ->middleware(['auth', 'verified'])
-    ->name('data-management');
+Route::resource('persons', PersonsController::class);
 
 Route::get('/persons/add/5', [
     PersonsController::class,

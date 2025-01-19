@@ -53,22 +53,3 @@ const deletePerson = (id, name) => {
         </div>
     </AuthenticatedLayout>
 </template>
-<!-- <script>
-export default {
-    // methods: {
-    //     deletePerson(id) {
-    //         this.$refs.form.delete(`persons/${id}`);
-    //     },
-    // },
-    // methods: {
-    //     incrementCount(amount = 1) {
-    //         this.count += amount;
-    //     },
-    // },
-    methods: {
-        test() {
-            console.log('Function from the parent component');
-        },
-    },
-};
-</script> -->

@@ -16,8 +16,17 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', ['data' => Persons::all()]);
+Route::get('dashboard', function () {
+    $persons = Persons::latest()->get();
+    $males = Persons::where('gender', 'male')->latest()->get();
+    $females = Persons::where('gender', 'female')->latest()->get();
+    $dob = Persons::orderBy('dob', 'desc')->get();
+    return Inertia::render('Dashboard/Index', [
+        'persons' => $persons,
+        'males' => $males,
+        'females' => $females,
+        'dob' => $dob,
+    ]);
 })
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

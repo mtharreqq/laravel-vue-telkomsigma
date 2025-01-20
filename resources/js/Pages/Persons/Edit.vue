@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import countriesData from '@/lib/countries.json';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -15,9 +16,7 @@ const props = defineProps({
 
 const form = useForm({
     name: props.person.name,
-    email: props.person.email,
     gender: props.person.gender,
-    phone: props.person.phone,
     dob: props.person.dob,
     country: props.person.country,
 });
@@ -63,62 +62,26 @@ const submit = () => {
                                     :message="form.errors.name"
                                 />
                             </div>
-
-                            <div>
-                                <InputLabel for="email" value="Email" />
-
-                                <TextInput
-                                    id="email"
-                                    type="email"
-                                    class="mt-1 block w-full"
-                                    v-model="form.email"
-                                    required
-                                    autocomplete="username"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.email"
-                                />
-                            </div>
-
                             <div>
                                 <InputLabel for="gender" value="Gender" />
-
-                                <TextInput
-                                    id="gender"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.gender"
+                                <select
+                                    name="gender"
+                                    id="gender-select"
                                     required
-                                />
+                                    class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    v-model="form.gender"
+                                >
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
 
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.gender"
                                 />
                             </div>
-
-                            <div>
-                                <InputLabel for="phone" value="Phone" />
-
-                                <TextInput
-                                    id="phone"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.phone"
-                                    required
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.phone"
-                                />
-                            </div>
-
                             <div>
                                 <InputLabel for="dob" value="Date of Birth" />
-
                                 <TextInput
                                     id="dob"
                                     type="date"
@@ -126,24 +89,30 @@ const submit = () => {
                                     v-model="form.dob"
                                     required
                                 />
-
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.dob"
                                 />
                             </div>
-
                             <div>
                                 <InputLabel for="country" value="Country" />
-
-                                <TextInput
-                                    id="country"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.country"
+                                <select
+                                    name="country"
+                                    id="country-select"
                                     required
-                                />
-
+                                    class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    v-model="form.country"
+                                >
+                                    <option
+                                        v-for="(
+                                            country, index
+                                        ) in countriesData"
+                                        :key="index"
+                                        :value="country.name"
+                                    >
+                                        {{ country.name }}
+                                    </option>
+                                </select>
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.country"

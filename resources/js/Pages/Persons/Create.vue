@@ -4,13 +4,12 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import countriesData from '@/lib/countries.json';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     name: '',
-    email: '',
     gender: '',
-    phone: '',
     dob: '',
     country: '',
 });
@@ -32,12 +31,12 @@ const submit = () => {
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                <div
+                    class="w-full overflow-hidden bg-white shadow-sm sm:rounded-lg"
+                >
                     <div class="p-6 text-gray-900">
-                        <form
-                            @submit.prevent="submit"
-                            class="grid grid-cols-1 gap-6 lg:grid-cols-2"
-                        >
+                        <form @submit.prevent="submit" class="space-y-6">
+                            <!-- NAME -->
                             <div>
                                 <InputLabel for="name" value="Name" />
 
@@ -56,98 +55,76 @@ const submit = () => {
                                     :message="form.errors.name"
                                 />
                             </div>
+                            <div class="grid grid-cols-2 gap-6">
+                                <!-- GENDER -->
+                                <div>
+                                    <InputLabel for="gender" value="Gender" />
+                                    <select
+                                        name="gender"
+                                        id="gender-select"
+                                        required
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        v-model="form.gender"
+                                    >
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
 
-                            <div>
-                                <InputLabel for="email" value="Email" />
-
-                                <TextInput
-                                    id="email"
-                                    type="email"
-                                    class="mt-1 block w-full"
-                                    v-model="form.email"
-                                    required
-                                    autocomplete="username"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.email"
-                                />
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.gender"
+                                    />
+                                </div>
+                                <!-- DOB -->
+                                <div>
+                                    <InputLabel
+                                        for="dob"
+                                        value="Date of Birth"
+                                    />
+                                    <TextInput
+                                        id="dob"
+                                        type="date"
+                                        class="block w-full"
+                                        v-model="form.dob"
+                                        required
+                                    />
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.dob"
+                                    />
+                                </div>
                             </div>
-
-                            <div>
-                                <InputLabel for="gender" value="Gender" />
-
-                                <TextInput
-                                    id="gender"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.gender"
-                                    required
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.gender"
-                                />
-                            </div>
-
-                            <div>
-                                <InputLabel for="phone" value="Phone" />
-
-                                <TextInput
-                                    id="phone"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.phone"
-                                    required
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.phone"
-                                />
-                            </div>
-
-                            <div>
-                                <InputLabel for="dob" value="Date of Birth" />
-
-                                <TextInput
-                                    id="dob"
-                                    type="date"
-                                    class="mt-1 block w-full"
-                                    v-model="form.dob"
-                                    required
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.dob"
-                                />
-                            </div>
-
+                            <!-- COUNTRY -->
                             <div>
                                 <InputLabel for="country" value="Country" />
-
-                                <TextInput
-                                    id="country"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.country"
+                                <select
+                                    name="country"
+                                    id="country-select"
                                     required
-                                />
-
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    v-model="form.country"
+                                >
+                                    <option
+                                        v-for="(
+                                            country, index
+                                        ) in countriesData"
+                                        :key="index"
+                                        :value="country.name"
+                                    >
+                                        {{ country.name }}
+                                    </option>
+                                </select>
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.country"
                                 />
                             </div>
-
+                            <!-- SUBMIT -->
                             <div
                                 class="col-span-1 mt-4 flex items-center justify-end lg:col-span-2"
                             >
                                 <PrimaryButton
-                                    class="ms-4"
+                                    class="ms-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-600"
                                     :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing"
                                 >

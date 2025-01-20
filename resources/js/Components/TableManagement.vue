@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import DebouncedInput from '@/Components/DebouncedInput.vue';
 import Filter from '@/Components/Filter.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import toTitleCase from '@/lib/titleCase';
 import {
     ColumnFiltersState,
-    FlexRender,
     createColumnHelper,
+    FlexRender,
     getCoreRowModel,
     getFacetedMinMaxValues,
     getFacetedRowModel,
     getFacetedUniqueValues,
     getFilteredRowModel,
+    getSortedRowModel,
+    SortingState,
     useVueTable,
 } from '@tanstack/vue-table';
 import { ref } from 'vue';
+import PrimaryButton from './PrimaryButton.vue';
 
 type Person = {
     id: number;
@@ -38,34 +43,31 @@ const columns = [
     }),
     columnHelper.accessor('gender', {
         header: () => 'Gender',
+        cell: (info) => {
+            return toTitleCase(info.getValue());
+        },
     }),
-    // columnHelper.accessor('email', {
-    //     header: () => 'Email',
-    // }),
     columnHelper.accessor('dob', {
         header: () => 'Date of Birth',
         cell: (info) => {
-            const dateString = info.getValue(); // Get the string value
+            const dateString = info.getValue();
             const formattedDate = new Date(dateString)
                 .toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric',
                 })
-                .replace(',', ''); // Format the date
+                .replace(',', '');
             return formattedDate;
         },
     }),
-    // columnHelper.accessor('phone', {
-    //     header: () => 'Phone',
-    // }),
     columnHelper.accessor('country', {
         header: () => 'Country',
     }),
     columnHelper.accessor('updated_at', {
         header: () => 'Last Update',
         cell: (info) => {
-            const dateString = info.getValue(); // Get the string value
+            const dateString = info.getValue();
             const formattedDate = new Date(dateString)
                 .toLocaleDateString('en-GB', {
                     day: '2-digit',
@@ -74,39 +76,18 @@ const columns = [
                     hour: '2-digit',
                     minute: '2-digit',
                 })
-                .replace(',', ''); // Format the date
+                .replace(',', '');
             return formattedDate;
         },
     }),
-
-    // {
-    //     id: 'select',
-    //     header: ({ table }: { table: any }) => {
-    //         return (
-    //             <IndeterminateCheckbox
-    //                 checked={table.getIsAllRowsSelected()}
-    //                 indeterminate={table.getIsSomeRowsSelected()}
-    //                 onChange={table.getToggleAllRowsSelectedHandler()}
-    //             ></IndeterminateCheckbox>
-    //         );
-    //     },
-    //     cell: ({ row }: { row: any }) => {
-    //         return (
-    //             <IndeterminateCheckbox
-    //                 checked={row.getIsSelected()}
-    //                 disabled={!row.getCanSelect()}
-    //                 onChange={row.getToggleSelectedHandler()}
-    //             ></IndeterminateCheckbox>
-    //         );
-    //     },
-    // },
 ];
 const data = ref(defaultData);
+const columnFilters = ref<ColumnFiltersState>([]);
+const globalFilter = ref('');
+const sorting = ref<SortingState>([]);
 // const rerender = () => {
 //     data.value = defaultData;
 // };
-const columnFilters = ref<ColumnFiltersState>([]);
-const globalFilter = ref('');
 
 const table = useVueTable({
     get data() {
@@ -119,6 +100,9 @@ const table = useVueTable({
         },
         get globalFilter() {
             return globalFilter.value;
+        },
+        get sorting() {
+            return sorting.value;
         },
     },
     onColumnFiltersChange: (updaterOrValue) => {
@@ -133,11 +117,19 @@ const table = useVueTable({
                 ? updaterOrValue(globalFilter.value)
                 : updaterOrValue;
     },
+    onSortingChange: (updaterOrValue) => {
+        sorting.value =
+            typeof updaterOrValue === 'function'
+                ? updaterOrValue(sorting.value)
+                : updaterOrValue;
+    },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    getSortedRowModel: getSortedRowModel(),
+    // debugTable: true,
 });
 </script>
 
@@ -150,169 +142,70 @@ const table = useVueTable({
                 className="p-2 font-lg shadow border border-block"
                 placeholder="Search all columns..."
             /> -->
-
             <!-- Spesific separate filter -->
-            <!-- <template
-                v-if="
-                    !table.getHeaderGroups()[0].headers[0].isPlaceholder &&
-                    table.getHeaderGroups()[0].headers[0].column.getCanFilter()
-                "
+            <!-- <div
+                    class="inline-block"
+                    v-if="
+                        !table.getHeaderGroups()[0].headers[1].isPlaceholder &&
+                        table
+                            .getHeaderGroups()[0]
+                            .headers[1].column.getCanFilter()
+                    "
+                >
+                    <Filter
+                        :column="table.getHeaderGroups()[0].headers[1].column"
+                        :table="table"
+                    />
+                </div> -->
+            <caption
+                class="w-full bg-white pb-5 text-left text-lg font-semibold text-gray-900 rtl:text-right dark:bg-gray-800 dark:text-white"
             >
-                <Filter
-                    :column="table.getHeaderGroups()[0].headers[0].column"
-                    :table="table"
-                />
-            </template> -->
+                Generate Your Dummy Person
+                <p
+                    class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"
+                >
+                    Manage and organize all your persons here. Create, update,
+                    delete, and view records effortlessly.
+                </p>
+            </caption>
         </div>
+
         <div
             class="flex-column flex flex-wrap items-center justify-between space-y-4 pb-4 sm:flex-row sm:space-y-0"
         >
-            <!-- <div>
-                <button
-                    id="dropdownRadioButton"
-                    data-dropdown-toggle="dropdownRadio"
-                    class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-                    type="button"
+            <div class="space-x-3">
+                <a href="persons/create">
+                    <PrimaryButton
+                        class="bg-blue-600 pl-7 hover:bg-blue-700 active:bg-blue-600"
+                        ><svg
+                            class="absolute -ms-[18px] mb-[1px] h-4 w-4"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clip-rule="evenodd"
+                            ></path>
+                        </svg>
+                        Add Person
+                    </PrimaryButton>
+                </a>
+                <a href="persons/add/5">
+                    <SecondaryButton> Generate 5 Person</SecondaryButton>
+                </a>
+                <a
+                    href="persons/delete/all"
+                    onclick="return confirm('Are you sure you want to delete all data? This action cannot be undone.');"
                 >
-                    <svg
-                        class="me-3 h-3 w-3 text-gray-500 dark:text-gray-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
+                    <SecondaryButton
+                        class="hover:border-red-800 hover:bg-red-50 hover:text-red-800"
                     >
-                        <path
-                            d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"
-                        />
-                    </svg>
-                    Last 30 days
-                    <svg
-                        class="ms-2.5 h-2.5 w-2.5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
+                        Delete All</SecondaryButton
                     >
-                        <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m1 1 4 4 4-4"
-                        />
-                    </svg>
-                </button>
-                <div
-                    id="dropdownRadio"
-                    class="z-10 hidden w-48 divide-y divide-gray-100 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700"
-                    data-popper-reference-hidden=""
-                    data-popper-escaped=""
-                    data-popper-placement="top"
-                    style="
-                        position: absolute;
-                        inset: auto auto 0px 0px;
-                        margin: 0px;
-                        transform: translate3d(522.5px, 3847.5px, 0px);
-                    "
-                >
-                    <ul
-                        class="space-y-1 p-3 text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownRadioButton"
-                    >
-                        <li>
-                            <div
-                                class="flex items-center rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <input
-                                    id="filter-radio-example-1"
-                                    type="radio"
-                                    value=""
-                                    name="filter-radio"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                                />
-                                <label
-                                    for="filter-radio-example-1"
-                                    class="ms-2 w-full rounded text-sm font-medium text-gray-900 dark:text-gray-300"
-                                    >Last day</label
-                                >
-                            </div>
-                        </li>
-                        <li>
-                            <div
-                                class="flex items-center rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <input
-                                    checked=""
-                                    id="filter-radio-example-2"
-                                    type="radio"
-                                    value=""
-                                    name="filter-radio"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                                />
-                                <label
-                                    for="filter-radio-example-2"
-                                    class="ms-2 w-full rounded text-sm font-medium text-gray-900 dark:text-gray-300"
-                                    >Last 7 days</label
-                                >
-                            </div>
-                        </li>
-                        <li>
-                            <div
-                                class="flex items-center rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <input
-                                    id="filter-radio-example-3"
-                                    type="radio"
-                                    value=""
-                                    name="filter-radio"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                                />
-                                <label
-                                    for="filter-radio-example-3"
-                                    class="ms-2 w-full rounded text-sm font-medium text-gray-900 dark:text-gray-300"
-                                    >Last 30 days</label
-                                >
-                            </div>
-                        </li>
-                        <li>
-                            <div
-                                class="flex items-center rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <input
-                                    id="filter-radio-example-4"
-                                    type="radio"
-                                    value=""
-                                    name="filter-radio"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                                />
-                                <label
-                                    for="filter-radio-example-4"
-                                    class="ms-2 w-full rounded text-sm font-medium text-gray-900 dark:text-gray-300"
-                                    >Last month</label
-                                >
-                            </div>
-                        </li>
-                        <li>
-                            <div
-                                class="flex items-center rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <input
-                                    id="filter-radio-example-5"
-                                    type="radio"
-                                    value=""
-                                    name="filter-radio"
-                                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                                />
-                                <label
-                                    for="filter-radio-example-5"
-                                    class="ms-2 w-full rounded text-sm font-medium text-gray-900 dark:text-gray-300"
-                                    >Last year</label
-                                >
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div> -->
+                </a>
+            </div>
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative">
                 <div
@@ -358,29 +251,63 @@ const table = useVueTable({
                             :key="header.id"
                             :colSpan="header.colSpan"
                             scope="col"
-                            class="px-6 py-3"
+                            class="cursor-pointer px-6 py-3"
                         >
-                            <FlexRender
-                                v-if="!header.isPlaceholder"
-                                :render="header.column.columnDef.header"
-                                :props="header.getContext()"
-                            />
-                            <template
+                            <div
                                 v-if="
                                     !header.isPlaceholder &&
                                     header.column.getCanFilter()
                                 "
+                                class="flex justify-between gap-1"
                             >
+                                <FlexRender
+                                    v-if="!header.isPlaceholder"
+                                    :render="header.column.columnDef.header"
+                                    :props="header.getContext()"
+                                />
+                                {{
+                                    { asc: ' 🔼', desc: ' 🔽' }[
+                                        header.column.getIsSorted() as string
+                                    ]
+                                }}
+                                <a
+                                    class=""
+                                    href="#"
+                                    @click="
+                                        header.column.getToggleSortingHandler()?.(
+                                            $event,
+                                        )
+                                    "
+                                    ><svg
+                                        class="ms-1.5 h-3 w-3"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"
+                                        /></svg
+                                ></a>
+                            </div>
+                            <div class="mt-2">
                                 <Filter
                                     :column="header.column"
                                     :table="table"
                                 />
-                            </template>
+                            </div>
                         </th>
-                        <th scope="col" class="px-6 py-3">Actions</th>
+                        <th scope="col" class="w-4 px-6 py-3 text-right">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody
+                    v-if="
+                        table.getRowModel().rows &&
+                        table.getRowModel().rows.length > 0
+                    "
+                >
                     <tr
                         v-for="row in table.getRowModel().rows"
                         :key="row.id"
@@ -392,7 +319,7 @@ const table = useVueTable({
                             :class="
                                 index === 0
                                     ? 'whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'
-                                    : ''
+                                    : 'px-6 py-4'
                             "
                         >
                             <FlexRender
@@ -417,6 +344,14 @@ const table = useVueTable({
                                 class="font-medium text-red-600 hover:cursor-pointer hover:underline dark:text-red-500"
                                 >Remove</a
                             >
+                        </td>
+                    </tr>
+                </tbody>
+                <!-- Fallback message when data is null or empty -->
+                <tbody v-else>
+                    <tr>
+                        <td colspan="6" class="p-4 text-center">
+                            No data available
                         </td>
                     </tr>
                 </tbody>

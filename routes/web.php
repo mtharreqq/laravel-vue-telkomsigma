@@ -8,12 +8,7 @@ use Inertia\Inertia;
 use App\Models\Persons;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect()->route('dashboard');
 });
 
 Route::get('dashboard', function () {
@@ -27,26 +22,18 @@ Route::get('dashboard', function () {
         'females' => $females,
         'dob' => $dob,
     ]);
-})
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+})->name('dashboard');
 
 Route::resource('persons', PersonsController::class);
 
-Route::get('/persons/add/5', [
-    PersonsController::class,
-    'addPersons',
-])->middleware(['auth', 'verified']);
+Route::get('/persons/add/5', [PersonsController::class, 'addPersons']);
 
-Route::get('/persons/delete/5', [
-    PersonsController::class,
-    'delete5Persons',
-])->middleware(['auth', 'verified']);
+Route::get('/persons/delete/5', [PersonsController::class, 'delete5Persons']);
 
 Route::get('/persons/delete/all', [
     PersonsController::class,
     'deleteAllPersons',
-])->middleware(['auth', 'verified']);
+]);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name(

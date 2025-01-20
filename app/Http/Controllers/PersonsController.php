@@ -20,9 +20,7 @@ class PersonsController extends Controller
                     function ($person) {
                         return [
                             'name' => "{$person['name']['first']} {$person['name']['last']}",
-                            'email' => $person['email'],
                             'gender' => $person['gender'],
-                            'phone' => $person['phone'],
                             'dob' => substr($person['dob']['date'], 0, 10),
                             'country' => "{$person['location']['country']}",
                         ];
@@ -34,10 +32,6 @@ class PersonsController extends Controller
                     Persons::create($data);
                 }
 
-                // return response()->json(
-                //     ['message' => 'Persons added successfully!'],
-                //     200
-                // );
                 return redirect()
                     ->back()
                     ->with('success', 'Persons added successfully!');
@@ -90,11 +84,6 @@ class PersonsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
-    //     return Persons::latest()->get();
-    // }
-
     public function index()
     {
         $persons = Persons::latest()->get();

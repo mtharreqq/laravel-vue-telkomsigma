@@ -1,17 +1,3 @@
-<template>
-    <Head title="Dashboard" />
-    <AuthenticatedLayout>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Dashboard
-            </h2>
-        </template>
-        <div id="app" class="highcharts-light">
-            <Dashboard :config="config"></Dashboard>
-        </div>
-    </AuthenticatedLayout>
-</template>
-
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Dashboard from '@/Pages/Dashboard/Dashboard.vue';
@@ -222,3 +208,17 @@ const config = {
     ],
 };
 </script>
+
+<template>
+    <Head title="Dashboard" />
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                Dashboard
+            </h2>
+        </template>
+        <div id="app" class="highcharts-light">
+            <Dashboard :config="config"></Dashboard>
+        </div>
+    </AuthenticatedLayout>
+</template>

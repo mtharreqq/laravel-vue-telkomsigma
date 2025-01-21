@@ -16,6 +16,7 @@
     padding: 0;
     padding-top: 8px;
     margin: 0;
+    border: none !important;
 }
 
 .highcharts-background {
@@ -38,6 +39,7 @@
 .highcharts-dashboards-row#row-1 {
     background-color: transparent;
     border-radius: 0.5rem;
+    border: none;
 }
 .highcharts-dashboards-row#row-2 {
     background-color: transparent;
@@ -61,7 +63,7 @@
 .highcharts-dashboards-cell > .highcharts-dashboards-component {
     background-color: white;
     border-radius: 0.5rem;
-    /* padding: 10px; */
+    margin: 0;
 }
 
 /* Components general */
@@ -83,8 +85,99 @@
 }
 
 /* Components specific */
-#dashboard-row-3-cell-2 .highcharts-datagrid-container {
-    /* border: none; */
+/* TOTAL PERSON */
+#dashboard-row-1-cell-1 > * {
+    border: none;
+    margin: 4px 0px 4px 0px;
     font-weight: 100;
     border-radius: 0.5rem;
+    background-color: white;
+    box-shadow: none;
+}
+/* MALES */
+#dashboard-row-2-cell-1
+    .highcharts-dashboards-component
+    .highcharts-dashboards-component-kpi-value {
+    color: #5c6dff;
+}
+#dashboard-row-2-cell-1 > * {
+    border: none;
+    margin: 4px 4px 4px 0px;
+    font-weight: 100;
+    border-radius: 0.5rem;
+    background-color: white;
+    box-shadow: none;
+}
+/* FEMALES */
+#dashboard-row-2-cell-2
+    .highcharts-dashboards-component
+    .highcharts-dashboards-component-kpi-value {
+    color: #fe74a6;
+}
+#dashboard-row-2-cell-2 > * {
+    border: none;
+    margin: 4px 0px 4px 4px;
+    font-weight: 100;
+    border-radius: 0.5rem;
+    background-color: white;
+    box-shadow: none;
+}
+/* PIE CHART */
+#dashboard-row-3-cell-1 > * {
+    border: none;
+    margin: 4px 4px 4px 0px;
+    font-weight: 100;
+    border-radius: 0.5rem;
+    background-color: white;
+    box-shadow: none;
+}
+/* TABLE */
+#dashboard-row-3-cell-2 .highcharts-datagrid-container {
+    border: none;
+    font-weight: 100;
+    border-radius: 0.5rem;
+}
+#dashboard-row-3-cell-2 > * {
+    border: none;
+    margin: 4px 0px 4px 4px;
+    font-weight: 100;
+    border-radius: 0.5rem;
+    background-color: white;
+    box-shadow: none;
+}
+
+#dashboard-row-3-cell-2 .highcharts-datagrid-container {
+    border: none;
+    font-weight: 100;
+}
+.highcharts-datagrid-container table {
+    border: 0;
+}
+.highcharts-datagrid-container tbody {
+    background-color: var(--highcharts-neutral-color-0);
+}
+.highcharts-datagrid-container {
+    background-color: transparent;
+}
+#dashboard-row-3-cell-2 .highcharts-datagrid-table th {
+    background-color: var(--highcharts-neutral-color-0);
+}
+#dashboard-row-3-cell-2 .highcharts-datagrid-row {
+    background-color: var(--highcharts-neutral-color-0);
+}
+#dashboard-row-3-cell-2 .highcharts-datagrid-hovered-column {
+    background: none;
+}
+#dashboard-row-3-cell-2 .highcharts-datagrid-hovered-row td {
+    background: var(--highcharts-dashboards-green-transparent);
+}
+
+/* COLUMN CHART */
+#dashboard-row-4-cell-1 > * {
+    border: none;
+    margin: 4px 0px 4px 0px;
+    font-weight: 100;
+    border-radius: 0.5rem;
+    background-color: white;
+    box-shadow: none;
 }

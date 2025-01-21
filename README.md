@@ -1,7 +1,7 @@
 # Telkomsigma | Laravel + Vue
 
 <div align="center">
-  <img src="https://i.imgur.com/9aPcbIw.jpeg" alt="Image Description" style="width: auto; height: 500px;">
+  <img src="https://i.imgur.com/0kPi9Lg.jpeg" alt="Image Description" style="width: auto; height: 500px;">
 </div>
 
 ## Installation Guide

@@ -1,3 +1,38 @@
+# Telkomsigma | Laravel + Vue
+
+<div align="center">
+  <img src="https://i.imgur.com/9aPcbIw.jpeg" alt="Image Description" style="width: auto; height: 500px;">
+</div>
+
+## How to Install
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/mtharreqq/laravel-vue-telkomsigma.git
+    ```
+2. Navigate to the project directory:
+    ```sh
+    cd laravel-vue-telkomsigma
+    ```
+4. Run Composer to install PHP dependencies:
+   ```sh
+    composer install
+    ```
+5. Install the Node.js dependencies:
+    ```sh
+    npm install
+    ```
+4. Seed the database with Persons data:
+    ```sh
+    php artisan db:seed
+    ```
+
+
+## How to Run
+1. Start the development server:
+   ```sh
+    composer run dev
+    ```
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

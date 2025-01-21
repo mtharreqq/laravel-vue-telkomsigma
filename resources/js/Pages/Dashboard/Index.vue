@@ -135,7 +135,6 @@ const config = {
                 title: {
                     text: 'Comparison of Males and Females',
                 },
-                colors: ['#FCE700', '#F8C4B4'],
                 series: [
                     {
                         name: 'Total',
@@ -175,7 +174,7 @@ const config = {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Count trophies',
+                        text: 'Count births',
                     },
                     stackLabels: {
                         enabled: true,
@@ -243,64 +242,72 @@ const config = {
             </h2>
         </template>
 
-        <div
-            id="app"
-            class="highcharts-light mx-auto max-w-7xl sm:px-6 lg:px-8"
-        >
-            <form
-                method="GET"
-                action="/dashboard"
-                class="mt-8 w-full bg-white p-6 shadow-sm sm:rounded-lg"
-            >
-                <caption
-                    class="block bg-white pb-5 text-left text-lg font-semibold text-gray-900 rtl:text-right dark:bg-gray-800 dark:text-white"
-                >
-                    Demographic Overview
-                    <p
-                        class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"
-                    >
-                        A Detailed Analysis of Gender Ratios and Yearly Birth
-                        Trends. Filter birth dates to analyze demographics
-                        across all views.
-                    </p>
-                </caption>
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Start Date Field -->
-                    <div>
-                        <InputLabel for="startDate" value="Start Date:" />
-                        <TextInput
-                            id="startDate"
-                            type="date"
-                            class="block w-full"
-                            v-model="startDate"
-                            name="startDate"
-                        />
-                    </div>
+        <div id="app" class="highcharts-light my-8">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div>
+                    <div class="text-gray-900">
+                        <div class="overflow-hidden bg-white p-6 sm:rounded-lg">
+                            <div
+                                class="block bg-white pb-5 text-left text-lg font-semibold text-gray-900 dark:bg-gray-800 dark:text-white rtl:text-right"
+                            >
+                                Demographic Overview
+                                <p
+                                    class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"
+                                >
+                                    A Detailed Analysis of Gender Ratios and
+                                    Yearly Birth Trends. Filter birth dates to
+                                    analyze demographics across all views.
+                                </p>
+                            </div>
+                            <form method="GET" action="/dashboard" class="">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Start Date Field -->
+                                    <div>
+                                        <InputLabel
+                                            for="startDate"
+                                            value="Start Date:"
+                                        />
+                                        <TextInput
+                                            id="startDate"
+                                            type="date"
+                                            class="block w-full"
+                                            v-model="startDate"
+                                            name="startDate"
+                                        />
+                                    </div>
 
-                    <!-- End Date Field -->
-                    <div>
-                        <InputLabel for="endDate" value="End Date:" />
-                        <TextInput
-                            id="endDate"
-                            type="date"
-                            class="block w-full"
-                            v-model="endDate"
-                            name="endDate"
-                        />
-                    </div>
+                                    <!-- End Date Field -->
+                                    <div>
+                                        <InputLabel
+                                            for="endDate"
+                                            value="End Date:"
+                                        />
+                                        <TextInput
+                                            id="endDate"
+                                            type="date"
+                                            class="block w-full"
+                                            v-model="endDate"
+                                            name="endDate"
+                                        />
+                                    </div>
 
-                    <!-- Filter Button -->
-                    <div class="">
-                        <PrimaryButton
-                            class="bg-blue-600 hover:bg-blue-700 active:bg-blue-600"
-                            @click="customSearch"
-                        >
-                            Filter Date
-                        </PrimaryButton>
+                                    <!-- Filter Button -->
+                                    <div class="">
+                                        <PrimaryButton
+                                            class="bg-blue-600 hover:bg-blue-700 active:bg-blue-600"
+                                            @click="customSearch"
+                                        >
+                                            Filter Date
+                                        </PrimaryButton>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <Dashboard :config="config"></Dashboard>
                     </div>
                 </div>
-            </form>
-            <Dashboard :config="config"></Dashboard>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>

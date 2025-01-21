@@ -2,6 +2,7 @@
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -185,8 +186,13 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Heading -->
             <header class="bg-white shadow" v-if="$slots.header">
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <div
+                    class="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8"
+                >
                     <slot name="header" />
+                    <a href="persons/add/5">
+                        <SecondaryButton> Generate 5 Person</SecondaryButton>
+                    </a>
                 </div>
             </header>
 

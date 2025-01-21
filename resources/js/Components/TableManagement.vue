@@ -160,7 +160,11 @@ const table = useVueTable({
             <caption
                 class="w-full bg-white pb-5 text-left text-lg font-semibold text-gray-900 rtl:text-right dark:bg-gray-800 dark:text-white"
             >
-                Generate Your Dummy Person
+                Generate Your Dummy Person |
+                {{
+                    props.persons?.length
+                }}
+                Total
                 <p
                     class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"
                 >
@@ -251,7 +255,7 @@ const table = useVueTable({
                             :key="header.id"
                             :colSpan="header.colSpan"
                             scope="col"
-                            class="cursor-pointer px-6 py-3"
+                            class="px-6 py-3"
                         >
                             <div
                                 v-if="
@@ -271,8 +275,7 @@ const table = useVueTable({
                                     ]
                                 }}
                                 <a
-                                    class=""
-                                    href="#"
+                                    class="cursor-pointer"
                                     @click="
                                         header.column.getToggleSortingHandler()?.(
                                             $event,

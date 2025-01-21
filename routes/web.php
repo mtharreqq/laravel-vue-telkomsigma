@@ -6,22 +6,30 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Persons;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('dashboard', function () {
-    $persons = Persons::latest()->get();
-    $males = Persons::where('gender', 'male')->latest()->get();
-    $females = Persons::where('gender', 'female')->latest()->get();
-    $dob = Persons::orderBy('dob', 'desc')->get();
-    return Inertia::render('Dashboard/Index', [
-        'persons' => $persons,
-        'males' => $males,
-        'females' => $females,
-        'dob' => $dob,
-    ]);
+Route::get('dashboard', function (Request $request) {
+    $fromDate = request('startDate') ?? '1800-01-01';
+    $toDate = request('endDate') ?? '2045-01-01';
+    $persons = Persons::whereBetween('dob', [$fromDate, $toDate])
+        ->orderBy('dob', 'desc')
+        ->get();
+    $males = Persons::where('gender', 'male')
+        ->whereBetween('dob', [$fromDate, $toDate])
+        ->latest('dob')
+        ->get();
+    $females = Persons::where('gender', 'female')
+        ->whereBetween('dob', [$fromDate, $toDate])
+        ->latest('dob')
+        ->get();
+    return Inertia::render(
+        'Dashboard/Index',
+        compact('persons', 'males', 'females', 'fromDate', 'toDate')
+    );
 })->name('dashboard');
 
 Route::resource('persons', PersonsController::class);

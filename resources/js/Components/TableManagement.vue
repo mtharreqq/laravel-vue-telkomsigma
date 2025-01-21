@@ -196,9 +196,6 @@ const table = useVueTable({
                         Add Person
                     </PrimaryButton>
                 </a>
-                <a href="persons/add/5">
-                    <SecondaryButton> Generate 5 Person</SecondaryButton>
-                </a>
                 <a
                     href="persons/delete/all"
                     onclick="return confirm('Are you sure you want to delete all data? This action cannot be undone.');"

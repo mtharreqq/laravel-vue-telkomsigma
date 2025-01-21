@@ -46,23 +46,19 @@ Ensure the following tools are installed on your system:
     ```
 
 5. **Set Up Environment Variables**
-   Create a `.env` file by copying the example file:
+   Create a `.env` file by copying the example file and generate the application key:
 
     ```sh
-    cp .env.example .env
+    cp .env.example .env && php artisan key:generate
     ```
 
-6. **Run Database Migrations**
-   Apply the database migrations to set up the database schema:
+    Update the `.env` file with your database configuration and other necessary settings.
+
+6. **Run Database Migrations and Seeders**
+   Apply the database migrations and seed the database:
 
     ```sh
-    php artisan migrate
-    ```
-
-7. **Seed the Database**
-   Populate the database with initial data using the seeder:
-    ```sh
-    php artisan db:seed --class=PersonsSeeder
+    php artisan migrate && php artisan db:seed --class=PersonsSeeder
     ```
 
 ## How to Run the Application

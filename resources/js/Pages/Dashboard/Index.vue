@@ -67,6 +67,7 @@ const config = {
                         ],
                     },
                     {
+                        id: 'row-2',
                         cells: [
                             {
                                 id: 'dashboard-row-2-cell-1',
@@ -77,6 +78,7 @@ const config = {
                         ],
                     },
                     {
+                        id: 'row-3',
                         cells: [
                             {
                                 id: 'dashboard-row-3-cell-1',
@@ -87,6 +89,7 @@ const config = {
                         ],
                     },
                     {
+                        id: 'row-4',
                         cells: [
                             {
                                 id: 'dashboard-row-4-cell-1',
@@ -128,6 +131,7 @@ const config = {
             cell: 'dashboard-row-3-cell-1',
             renderTo: 'dashboard-row-3-cell-1',
             chartOptions: {
+                styledMode: true,
                 title: {
                     text: 'Comparison of Males and Females',
                 },

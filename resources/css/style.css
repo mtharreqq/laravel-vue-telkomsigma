@@ -2,10 +2,89 @@
 @import url('https://code.highcharts.com/dashboards/css/datagrid.css');
 @import url('https://code.highcharts.com/dashboards/css/dashboards.css');
 
-h1#title {
-    padding-top: 10px;
+/* Colors */
+:root {
+    --highcharts-dashboards-green: #5c6dff;
+    --highcharts-dashboards-orange: #fe74a6;
+    --highcharts-dashboards-green-transparent: #20d17e30;
+}
+
+/* General */
+.highcharts-dashboards,
+.highcharts-dashboards-wrapper {
+    background-color: transparent;
+    padding: 0;
+    padding-top: 8px;
     margin: 0;
-    background-color: #3d3d3d;
-    text-align: center;
-    color: #fff;
+}
+
+.highcharts-background {
+    fill: transparent;
+    /* fill: red; */
+    border-radius: 0.5rem;
+}
+
+.highcharts-color-0 {
+    stroke: var(--highcharts-dashboards-green);
+    fill: var(--highcharts-dashboards-green);
+}
+
+.highcharts-color-1 {
+    stroke: var(--highcharts-dashboards-orange);
+    fill: var(--highcharts-dashboards-orange);
+}
+
+/* Rows and cells */
+.highcharts-dashboards-row#row-1 {
+    background-color: transparent;
+    border-radius: 0.5rem;
+}
+.highcharts-dashboards-row#row-2 {
+    background-color: transparent;
+    border-radius: 0.5rem;
+}
+.highcharts-dashboards-row#row-3 {
+    background-color: transparent;
+    border-radius: 0.5rem;
+    padding: 0;
+}
+.highcharts-dashboards-row#row-3 > #dashboard-row-3-cell-2 {
+    background-color: transparent;
+}
+.highcharts-dashboards-row#row-4 {
+    background-color: transparent;
+    border-radius: 0.5rem;
+    padding: 0;
+    margin: 0;
+}
+
+.highcharts-dashboards-cell > .highcharts-dashboards-component {
+    background-color: white;
+    border-radius: 0.5rem;
+    /* padding: 10px; */
+}
+
+/* Components general */
+.highcharts-dashboards-component-title {
+    padding-top: 10px;
+    font-size: 0.8rem;
+    font-weight: 100;
+    margin: 0;
+}
+
+.highcharts-dashboards-component-subtitle {
+    font-size: 0.8rem;
+    font-weight: 100;
+    color: var(--highcharts-dashboards-green);
+}
+
+.highcharts-dashboards-component-kpi-value {
+    font-weight: bold;
+}
+
+/* Components specific */
+#dashboard-row-3-cell-2 .highcharts-datagrid-container {
+    /* border: none; */
+    font-weight: 100;
+    border-radius: 0.5rem;
 }

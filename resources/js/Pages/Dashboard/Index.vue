@@ -16,10 +16,6 @@ const props = defineProps({
     toDate: String,
 });
 
-console.log(props.persons);
-console.log(props.males);
-console.log(props.females);
-
 // Returns an object where each key is a year, and the value is an object with the count of males and females born in that year.
 const totalBirth = {};
 props.persons.forEach((person) => {
@@ -63,53 +59,37 @@ const config = {
             {
                 rows: [
                     {
+                        id: 'row-1',
                         cells: [
                             {
-                                id: 'kpi-wrapper',
-                                layout: {
-                                    rows: [
-                                        {
-                                            cells: [
-                                                {
-                                                    id: 'total-persons',
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            cells: [
-                                                {
-                                                    id: 'male',
-                                                },
-                                                {
-                                                    id: 'female',
-                                                },
-                                            ],
-                                        },
-                                    ],
-                                },
+                                id: 'dashboard-row-1-cell-1',
                             },
-                            // {
-                            //     id: 'pie-chart',
-                            // },
                         ],
                     },
                     {
                         cells: [
                             {
-                                id: 'pie-gender',
+                                id: 'dashboard-row-2-cell-1',
                             },
                             {
-                                id: 'table',
+                                id: 'dashboard-row-2-cell-2',
                             },
-                            // {
-                            //     id: 'pie-country',
-                            // },
                         ],
                     },
                     {
                         cells: [
                             {
-                                id: 'column-chart',
+                                id: 'dashboard-row-3-cell-1',
+                            },
+                            {
+                                id: 'dashboard-row-3-cell-2',
+                            },
+                        ],
+                    },
+                    {
+                        cells: [
+                            {
+                                id: 'dashboard-row-4-cell-1',
                             },
                         ],
                     },
@@ -121,7 +101,7 @@ const config = {
         // TOTAL PERSONS
         {
             type: 'KPI',
-            cell: 'total-persons',
+            cell: 'dashboard-row-1-cell-1',
             value: props.persons.length,
             valueFormat: '{value}',
             title: 'Total Persons',
@@ -129,7 +109,7 @@ const config = {
         // MALE
         {
             type: 'KPI',
-            cell: 'male',
+            cell: 'dashboard-row-2-cell-1',
             value: props.males.length,
             title: 'Males',
             valueFormat: '{value}',
@@ -137,7 +117,7 @@ const config = {
         // FEMALE
         {
             type: 'KPI',
-            cell: 'female',
+            cell: 'dashboard-row-2-cell-2',
             value: props.females.length,
             title: 'Females',
             valueFormat: '{value}',
@@ -145,7 +125,8 @@ const config = {
         // PIE GENDER
         {
             type: 'Highcharts',
-            renderTo: 'pie-gender',
+            cell: 'dashboard-row-3-cell-1',
+            renderTo: 'dashboard-row-3-cell-1',
             chartOptions: {
                 title: {
                     text: 'Comparison of Males and Females',
@@ -173,8 +154,7 @@ const config = {
         // COLUMN CHART
         {
             type: 'Highcharts',
-            renderTo: 'column-chart',
-
+            renderTo: 'dashboard-row-4-cell-1',
             chartOptions: {
                 title: {
                     text: 'Total Births Each Year',
@@ -223,7 +203,8 @@ const config = {
         },
         // TABLE
         {
-            renderTo: 'table',
+            renderTo: 'dashboard-row-3-cell-2',
+            cell: 'dashboard-row-3-cell-2',
             connector: {
                 id: 'synchro-data',
             },
@@ -275,7 +256,8 @@ const config = {
                         class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"
                     >
                         A Detailed Analysis of Gender Ratios and Yearly Birth
-                        Trends
+                        Trends. Filter birth dates to analyze demographics
+                        across all views.
                     </p>
                 </caption>
                 <div class="grid grid-cols-2 gap-4">

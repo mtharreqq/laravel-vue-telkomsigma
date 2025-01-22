@@ -12,6 +12,7 @@ import {
     getFacetedRowModel,
     getFacetedUniqueValues,
     getFilteredRowModel,
+    getPaginationRowModel,
     getSortedRowModel,
     SortingState,
     useVueTable,
@@ -30,6 +31,8 @@ type Person = {
     updated_at: string;
 };
 
+const INITIAL_PAGE_INDEX = 0;
+
 const props = defineProps({
     persons: Array,
     deletePerson: Function,
@@ -37,6 +40,9 @@ const props = defineProps({
 const persons = props.persons! as Person[];
 const defaultData: Person[] = persons;
 const columnHelper = createColumnHelper<Person>();
+const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1);
+const pageSizes = [10, 20, 30, 40, 50];
+
 const columns = [
     columnHelper.accessor('name', {
         header: () => 'Name',
@@ -85,6 +91,7 @@ const data = ref(defaultData);
 const columnFilters = ref<ColumnFiltersState>([]);
 const globalFilter = ref('');
 const sorting = ref<SortingState>([]);
+
 // const rerender = () => {
 //     data.value = defaultData;
 // };
@@ -129,8 +136,19 @@ const table = useVueTable({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     // debugTable: true,
 });
+
+function handleGoToPage(e: any) {
+    const page = e.target.value ? Number(e.target.value) - 1 : 0;
+    goToPageNumber.value = page + 1;
+    table.setPageIndex(page);
+}
+
+function handlePageSizeChange(e: any) {
+    table.setPageSize(Number(e.target.value));
+}
 </script>
 
 <template>
@@ -158,7 +176,7 @@ const table = useVueTable({
                     />
                 </div> -->
             <caption
-                class="w-full bg-white pb-5 text-left text-lg font-semibold text-gray-900 rtl:text-right dark:bg-gray-800 dark:text-white"
+                class="w-full bg-white pb-5 text-left text-lg font-semibold text-gray-900 dark:bg-gray-800 dark:text-white rtl:text-right"
             >
                 Generate Your Dummy Person |
                 {{
@@ -238,7 +256,7 @@ const table = useVueTable({
         </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table
-                class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400"
+                class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
             >
                 <thead
                     class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
@@ -356,6 +374,134 @@ const table = useVueTable({
                     </tr>
                 </tbody>
             </table>
+            <nav
+                class="flex-column m-4 flex flex-wrap items-center justify-between pt-4 md:flex-row"
+                aria-label="Table navigation"
+            >
+                <ul
+                    class="inline-flex h-8 items-center -space-x-px text-sm rtl:space-x-reverse"
+                >
+                    <li>
+                        <button
+                            @click="() => table.setPageIndex(0)"
+                            :disabled="!table.getCanPreviousPage()"
+                            class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            «
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            @click="() => table.previousPage()"
+                            :disabled="!table.getCanPreviousPage()"
+                            class="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            ‹
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            @click="() => table.nextPage()"
+                            :disabled="!table.getCanNextPage()"
+                            class="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            ›
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            @click="
+                                () =>
+                                    table.setPageIndex(table.getPageCount() - 1)
+                            "
+                            :disabled="!table.getCanNextPage()"
+                            class="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            »
+                        </button>
+                    </li>
+                    <span
+                        class="mb-4 block w-full pl-2 text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto"
+                        >Showing page
+                        <span
+                            class="font-semibold text-gray-900 dark:text-white"
+                        >
+                            {{ table.getState().pagination.pageIndex + 1 }}
+                        </span>
+                        of
+                        <span
+                            class="font-semibold text-gray-900 dark:text-white"
+                            >{{ table.getPageCount() }}</span
+                        ></span
+                    ><span class="flex items-center gap-1 pl-1">
+                        | Go to page:
+                        <input
+                            type="number"
+                            :value="goToPageNumber"
+                            @change="handleGoToPage"
+                            class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block h-[34px] w-16 rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                        />
+                    </span>
+                </ul>
+                <ul
+                    class="inline-flex h-8 items-center -space-x-px text-sm rtl:space-x-reverse"
+                >
+                    <li>
+                        <button
+                            @click="() => table.setPageIndex(0)"
+                            :disabled="!table.getCanPreviousPage()"
+                            class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            «
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            @click="() => table.previousPage()"
+                            :disabled="!table.getCanPreviousPage()"
+                            class="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            ‹
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            @click="() => table.nextPage()"
+                            :disabled="!table.getCanNextPage()"
+                            class="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            ›
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            @click="
+                                () =>
+                                    table.setPageIndex(table.getPageCount() - 1)
+                            "
+                            :disabled="!table.getCanNextPage()"
+                            class="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        >
+                            »
+                        </button>
+                    </li>
+                    <li class="pl-2">
+                        <select
+                            class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block h-[34px] w-full rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                            :value="table.getState().pagination.pageSize"
+                            @change="handlePageSizeChange"
+                        >
+                            <option
+                                :key="pageSize"
+                                :value="pageSize"
+                                v-for="pageSize in pageSizes"
+                            >
+                                Show {{ pageSize }}
+                            </option>
+                        </select>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </template>

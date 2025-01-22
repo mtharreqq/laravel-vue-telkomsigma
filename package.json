@@ -36,6 +36,7 @@
         "@tanstack/vue-table": "^8.20.5",
         "flowbite": "^2.5.2",
         "highcharts": "^12.1.2",
-        "highcharts-vue": "^2.0.1"
+        "highcharts-vue": "^2.0.1",
+        "vue-router": "^4.5.0"
     }
 }

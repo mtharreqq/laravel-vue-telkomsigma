@@ -81,6 +81,32 @@ class PersonsController extends Controller
         }
     }
 
+    public function dashboard(Request $request)
+    {
+        $today = date('Y-m-d');
+        $fromDate = $request->input('startDate', '1800-01-01');
+        $toDate = $request->input('endDate', $today);
+
+        $persons = Persons::whereBetween('dob', [$fromDate, $toDate])
+            ->orderBy('dob', 'desc')
+            ->get();
+
+        $males = Persons::where('gender', 'male')
+            ->whereBetween('dob', [$fromDate, $toDate])
+            ->latest('dob')
+            ->get();
+
+        $females = Persons::where('gender', 'female')
+            ->whereBetween('dob', [$fromDate, $toDate])
+            ->latest('dob')
+            ->get();
+
+        return Inertia::render(
+            'Dashboard/Index',
+            compact('persons', 'males', 'females', 'fromDate', 'toDate')
+        );
+    }
+
     /**
      * Display a listing of the resource.
      */

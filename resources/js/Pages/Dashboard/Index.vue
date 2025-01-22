@@ -6,6 +6,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import toTitleCase from '@/lib/titleCase';
 import Dashboard from '@/Pages/Dashboard/Dashboard.vue';
 import { Head } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 import '../../../css/style.css';
 
 const props = defineProps({
@@ -15,6 +17,22 @@ const props = defineProps({
     fromDate: String,
     toDate: String,
 });
+
+// Create reactive data
+const startDate = ref(props.fromDate);
+const endDate = ref(props.toDate);
+
+// Methods
+const customSearch = () => {
+    const route = useRoute();
+    route.push({
+        name: 'dashboard',
+        query: {
+            startDate: startDate.value,
+            endDate: endDate.value,
+        },
+    });
+};
 
 // Returns an object where each key is a year, and the value is an object with the count of males and females born in that year.
 const totalBirth = {};
@@ -311,23 +329,3 @@ const config = {
         </div>
     </AuthenticatedLayout>
 </template>
-<script>
-export default {
-    data() {
-        return {
-            startDate: '' ?? fromDate,
-            endDate: '' ?? toDate,
-        };
-    },
-    methods: {
-        customSearch() {
-            route.get(
-                route('dashboard', {
-                    startDate: this.startDate,
-                    endDate: this.endDate,
-                }),
-            );
-        },
-    },
-};
-</script>

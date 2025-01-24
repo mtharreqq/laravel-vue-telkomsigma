@@ -8,6 +8,14 @@ defineProps({
         type: Array,
         default: () => [],
     },
+    males: {
+        type: Array,
+        default: () => [],
+    },
+    females: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const form = useForm({});
@@ -45,6 +53,8 @@ const deletePerson = (id, name) => {
                     <div class="p-6 text-gray-900">
                         <TableManagement
                             :persons="persons"
+                            :males="males"
+                            :females="females"
                             :delete-person="deletePerson"
                         />
                     </div>

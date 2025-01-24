@@ -113,7 +113,13 @@ class PersonsController extends Controller
     public function index()
     {
         $persons = Persons::latest()->get();
-        return Inertia::render('Persons/Index', ['persons' => $persons]);
+        $males = Persons::where('gender', 'male')->latest()->get();
+        $females = Persons::where('gender', 'female')->latest()->get();
+        return Inertia::render('Persons/Index', [
+            'persons' => $persons,
+            'males' => $males,
+            'females' => $females,
+        ]);
     }
 
     /**

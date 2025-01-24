@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import DebouncedInput from '@/Components/DebouncedInput.vue';
-import Filter from '@/Components/Filter.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import toTitleCase from '@/lib/titleCase';
 import {
@@ -17,7 +16,7 @@ import {
     SortingState,
     useVueTable,
 } from '@tanstack/vue-table';
-import { ref } from 'vue';
+import { computed, ComputedRef, ref } from 'vue';
 import PrimaryButton from './PrimaryButton.vue';
 
 type Person = {
@@ -35,10 +34,32 @@ const INITIAL_PAGE_INDEX = 0;
 
 const props = defineProps({
     persons: Array,
+    males: Array,
+    females: Array,
     deletePerson: Function,
 });
+
+const gender = ref('all');
+const logGender = () => {
+    return gender.value;
+};
+
 const persons = props.persons! as Person[];
-const defaultData: Person[] = persons;
+const males = props.males! as Person[];
+const females = props.females! as Person[];
+
+const defaultData: ComputedRef<Person[]> = computed(() => {
+    switch (gender.value) {
+        case 'male':
+            return males;
+        case 'female':
+            return females;
+        default:
+            return persons;
+    }
+});
+
+// const defaultData: Person[] = persons;
 const columnHelper = createColumnHelper<Person>();
 const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1);
 const pageSizes = [10, 20, 30, 40, 50];
@@ -223,33 +244,68 @@ function handlePageSizeChange(e: any) {
                     >
                 </a>
             </div>
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative">
-                <div
-                    class="rtl:inset-r-0 pointer-events-none absolute inset-y-0 left-0 flex items-center ps-3 rtl:right-0"
-                >
-                    <svg
-                        class="h-5 w-5 text-gray-500 dark:text-gray-400"
-                        aria-hidden="true"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
+            <div class="flex gap-3">
+                <div class="relative">
+                    <div
+                        class="rtl:inset-r-0 pointer-events-none absolute inset-y-0 left-0 flex items-center ps-3 text-gray-500 rtl:right-0"
                     >
-                        <path
-                            fill-rule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"
-                        ></path>
-                    </svg>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-gender-male"
+                            viewBox="0 0 16 16"
+                            stroke="#6b7280"
+                            stroke-width="0.8"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8"
+                            />
+                        </svg>
+                    </div>
+                    <select
+                        name="gender"
+                        id="gender-select"
+                        required
+                        class="block rounded-lg border border-gray-300 bg-gray-50 p-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        v-model="gender"
+                        @change="logGender"
+                    >
+                        <option value="all">All</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
                 </div>
-                <DebouncedInput
-                    :modelValue="globalFilter ?? ''"
-                    @update:modelValue="
-                        (value) => (globalFilter = String(value))
-                    "
-                    className="block w-80 rounded-lg border border-gray-300 bg-gray-50 p-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                    placeholder="Search all columns..."
-                />
+                <label for="table-search" class="sr-only">Search</label>
+                <div class="relative">
+                    <div
+                        class="rtl:inset-r-0 pointer-events-none absolute inset-y-0 left-0 flex items-center ps-3 rtl:right-0"
+                    >
+                        <svg
+                            class="h-5 w-5 text-gray-500 dark:text-gray-400"
+                            aria-hidden="true"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"
+                            ></path>
+                        </svg>
+                    </div>
+                    <DebouncedInput
+                        :modelValue="globalFilter ?? ''"
+                        @update:modelValue="
+                            (value) => (globalFilter = String(value))
+                        "
+                        className="block w-64 rounded-lg border border-gray-300 bg-gray-50 p-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        placeholder="Search all columns..."
+                    />
+                </div>
             </div>
         </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -306,12 +362,12 @@ function handlePageSizeChange(e: any) {
                                         /></svg
                                 ></a>
                             </div>
-                            <div class="mt-2">
+                            <!-- <div class="mt-2">
                                 <Filter
                                     :column="header.column"
                                     :table="table"
                                 />
-                            </div>
+                            </div> -->
                         </th>
                         <th scope="col" class="w-4 px-6 py-3 text-right">
                             Actions

@@ -175,13 +175,11 @@ function handlePageSizeChange(e: any) {
                         :table="table"
                     />
                 </div> -->
-            <caption
+            <div
                 class="w-full bg-white pb-5 text-left text-lg font-semibold text-gray-900 dark:bg-gray-800 dark:text-white rtl:text-right"
             >
                 Generate Your Dummy Person |
-                {{
-                    props.persons?.length
-                }}
+                {{ props.persons?.length }}
                 Total
                 <p
                     class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"
@@ -189,7 +187,7 @@ function handlePageSizeChange(e: any) {
                     Manage and organize all your persons here. Create, update,
                     delete, and view records effortlessly.
                 </p>
-            </caption>
+            </div>
         </div>
 
         <div

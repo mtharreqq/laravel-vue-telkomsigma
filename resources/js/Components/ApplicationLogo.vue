@@ -1,3 +1,3 @@
 <template>
-    <img class="h-auto w-[32px]" src="/img/brand-logo.png" />
+    <img class="h-[32px] w-auto" src="/img/brand-logo.png" />
 </template>

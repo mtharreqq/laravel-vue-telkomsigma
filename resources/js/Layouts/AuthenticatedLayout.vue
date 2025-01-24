@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import Github from '@/Components/Logo/Github.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -44,6 +45,9 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                             </div>
                         </div>
+
+                        <!-- GitHub Icons -->
+                        <div class="flex items-center"><Github /></div>
 
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">

@@ -260,7 +260,7 @@ const config = {
             </h2>
         </template>
 
-        <div id="app" class="highcharts-light my-8">
+        <div id="app" class="highcharts-light py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div>
                     <div class="text-gray-900">
